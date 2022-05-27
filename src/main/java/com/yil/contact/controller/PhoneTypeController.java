@@ -1,6 +1,6 @@
 package com.yil.contact.controller;
 
-import com.yil.contact.base.ApiHeaders;
+import com.yil.contact.base.ApiConstant;
 import com.yil.contact.dto.CreatePhoneTypeDto;
 import com.yil.contact.dto.PhoneTypeDto;
 import com.yil.contact.model.PhoneType;
@@ -61,7 +61,7 @@ public class PhoneTypeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
+    public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
                                  @Valid @RequestBody CreatePhoneTypeDto dto) {
         try {
             PhoneType phoneType = new PhoneType();
@@ -78,7 +78,7 @@ public class PhoneTypeController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
+    public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
                                   @PathVariable Long id,
                                   @Valid @RequestBody CreatePhoneTypeDto dto) {
         try {
@@ -101,7 +101,7 @@ public class PhoneTypeController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
+    public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
                                          @PathVariable Long id) {
         try {
             PhoneType phoneType;

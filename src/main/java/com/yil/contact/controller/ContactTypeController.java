@@ -1,6 +1,6 @@
 package com.yil.contact.controller;
 
-import com.yil.contact.base.ApiHeaders;
+import com.yil.contact.base.ApiConstant;
 import com.yil.contact.dto.CreateContactTypeDto;
 import com.yil.contact.dto.ContactTypeDto;
 import com.yil.contact.model.ContactType;
@@ -61,7 +61,7 @@ public class ContactTypeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedContactId,
+    public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactId,
                                  @Valid @RequestBody CreateContactTypeDto dto) {
         try {
             ContactType contactType = new ContactType();
@@ -78,7 +78,7 @@ public class ContactTypeController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedContactId,
+    public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactId,
                                   @PathVariable Long id,
                                   @Valid @RequestBody CreateContactTypeDto dto) {
         try {
@@ -101,7 +101,7 @@ public class ContactTypeController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedContactId,
+    public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactId,
                                          @PathVariable Long id) {
         try {
             ContactType contactType;

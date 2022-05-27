@@ -1,6 +1,6 @@
 package com.yil.contact.controller;
 
-import com.yil.contact.base.ApiHeaders;
+import com.yil.contact.base.ApiConstant;
 import com.yil.contact.dto.CreateEmailTypeDto;
 import com.yil.contact.dto.EmailTypeDto;
 import com.yil.contact.model.EmailType;
@@ -61,7 +61,7 @@ public class EmailTypeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedEmailId,
+    public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedEmailId,
                                  @Valid @RequestBody CreateEmailTypeDto dto) {
         try {
             EmailType emailType = new EmailType();
@@ -78,7 +78,7 @@ public class EmailTypeController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedEmailId,
+    public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedEmailId,
                                   @PathVariable Long id,
                                   @Valid @RequestBody CreateEmailTypeDto dto) {
         try {
@@ -101,7 +101,7 @@ public class EmailTypeController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedEmailId,
+    public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedEmailId,
                                          @PathVariable Long id) {
         try {
             EmailType emailType;

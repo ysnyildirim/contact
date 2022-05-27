@@ -1,6 +1,6 @@
 package com.yil.contact.controller;
 
-import com.yil.contact.base.ApiHeaders;
+import com.yil.contact.base.ApiConstant;
 import com.yil.contact.base.PageDto;
 import com.yil.contact.dto.CreateContactEmailDto;
 import com.yil.contact.dto.ContactEmailDto;
@@ -35,8 +35,8 @@ public class ContactEmailController {
     @GetMapping
     public ResponseEntity<PageDto<ContactEmailDto>> findAll(
             @PathVariable Long contactId,
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "1000") int size) {
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
         try {
             if (page < 0)
                 page = 0;
@@ -79,7 +79,7 @@ public class ContactEmailController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedContactEmailId,
+    public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactEmailId,
                                  @PathVariable Long contactId,
                                  @Valid @RequestBody CreateContactEmailDto dto) {
         try {
@@ -100,7 +100,7 @@ public class ContactEmailController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedContactEmailId,
+    public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactEmailId,
                                   @PathVariable Long contactId,
                                   @PathVariable Long id,
                                   @Valid @RequestBody CreateContactEmailDto dto) {
@@ -125,7 +125,7 @@ public class ContactEmailController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedContactEmailId,
+    public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactEmailId,
                                          @PathVariable Long contactId,
                                          @PathVariable Long id) {
         try {

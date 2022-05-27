@@ -1,6 +1,6 @@
 package com.yil.contact.controller;
 
-import com.yil.contact.base.ApiHeaders;
+import com.yil.contact.base.ApiConstant;
 import com.yil.contact.dto.AddressTypeDto;
 import com.yil.contact.dto.CreateAddressTypeDto;
 import com.yil.contact.model.AddressType;
@@ -61,7 +61,7 @@ public class AddressTypeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedAddressId,
+    public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedAddressId,
                                  @Valid @RequestBody CreateAddressTypeDto dto) {
         try {
             AddressType addressType = new AddressType();
@@ -79,7 +79,7 @@ public class AddressTypeController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedAddressId,
+    public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedAddressId,
                                   @PathVariable Long id,
                                   @Valid @RequestBody CreateAddressTypeDto dto) {
         try {
@@ -102,7 +102,7 @@ public class AddressTypeController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedAddressId,
+    public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedAddressId,
                                          @PathVariable Long id) {
         try {
             AddressType addressType;

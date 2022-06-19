@@ -36,8 +36,7 @@ public class ContactEmailService {
         ContactEmailDto dto = new ContactEmailDto();
         dto.setContactId(contactEmail.getContactId());
         dto.setId(contactEmail.getId());
-        dto.setEmailTypeId(contactEmail.getEmailTypeId());
-        dto.setAddress(contactEmail.getAddress());
+        dto.setAddress(contactEmail.getEmail());
         return dto;
     }
 

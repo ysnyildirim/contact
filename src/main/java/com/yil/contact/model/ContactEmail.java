@@ -7,20 +7,18 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "ContactEmail")
+@Table(name = "CONTACT_EMAIL")
 public class ContactEmail extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "ContactEmail_Sequence_Generator",
-            sequenceName = "Seq_ContactEmail",
+    @SequenceGenerator(name = "CONTACT_EMAIL_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_CONTACT_EMAIL_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "ContactEmail_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "CONTACT_EMAIL_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "ContactId", nullable = false)
+    @Column(name = "CONTACT_ID", nullable = false)
     private Long contactId;
-    @Column(name = "Address", nullable = false)
-    private String address;
-    @Column(name = "EmailTypeId", nullable = false)
-    private Long emailTypeId;
+    @Column(name = "EMAIL", nullable = false)
+    private String email;
 
 }

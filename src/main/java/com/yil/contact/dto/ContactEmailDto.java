@@ -13,5 +13,4 @@ public class ContactEmailDto {
     private Long id;
     private Long contactId;
     private String address;
-    private Long emailTypeId;
 }

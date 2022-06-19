@@ -7,20 +7,20 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "ContactPhone")
+@Table(name = "CONTACT_PHONE")
 public class ContactPhone extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "ContactPhone_Sequence_Generator",
-            sequenceName = "Seq_ContactPhone",
+    @SequenceGenerator(name = "CONTACT_PHONE_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_CONTACT_PHONE_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "ContactPhone_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "CONTACT_PHONE_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "ContactId", nullable = false)
+    @Column(name = "CONTACT_ID", nullable = false)
     private Long contactId;
-    @Column(name = "PhoneId", nullable = false)
+    @Column(name = "NUMBER", nullable = false)
     private Long number;
-    @Column(name = "PhoneTypeId", nullable = false)
+    @Column(name = "PHONE_TYPE_ID", nullable = false)
     private Long phoneTypeId;
 
 }

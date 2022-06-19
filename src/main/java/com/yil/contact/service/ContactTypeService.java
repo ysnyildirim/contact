@@ -2,7 +2,6 @@ package com.yil.contact.service;
 
 import com.yil.contact.dto.ContactTypeDto;
 import com.yil.contact.model.ContactType;
-import com.yil.contact.model.EmailType;
 import com.yil.contact.repository.ContactTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

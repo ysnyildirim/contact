@@ -9,15 +9,15 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @Data
-@Table(name = "AddressType")
+@Table(name = "ADDRESS_TYPE")
 public class AddressType  extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "AddressType_Sequence_Generator",
-            sequenceName = "Seq_AddressType",
+    @SequenceGenerator(name = "ADDRESS_TYPE_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_ADDRESS_TYPE_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "AddressType_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "ADDRESS_TYPE_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 }

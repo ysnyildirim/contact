@@ -85,8 +85,7 @@ public class ContactEmailController {
         try {
             ContactEmail entity = new ContactEmail();
             entity.setContactId(contactId);
-            entity.setAddress(dto.getAddress());
-            entity.setEmailTypeId(dto.getEmailTypeId());
+            entity.setEmail(dto.getEmail());
             entity.setCreatedUserId(authenticatedContactEmailId);
             entity.setCreatedTime(new Date());
             entity = contactEmailService.save(entity);
@@ -113,8 +112,7 @@ public class ContactEmailController {
             }
             if (!entity.getContactId().equals(contactId))
                 return ResponseEntity.notFound().build();
-            entity.setEmailTypeId(dto.getEmailTypeId());
-            entity.setAddress(dto.getAddress());
+            entity.setEmail(dto.getEmail());
             entity = contactEmailService.save(entity);
             return ResponseEntity.ok().build();
         } catch (Exception exception) {

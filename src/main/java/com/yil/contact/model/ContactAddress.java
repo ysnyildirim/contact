@@ -7,37 +7,37 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "ContactAddress")
+@Table(name = "CONTACT_ADDRESS")
 public class ContactAddress extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "ContactAddress_Sequence_Generator",
-            sequenceName = "Seq_ContactAddress",
+    @SequenceGenerator(name = "CONTACT_ADDRESS_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_CONTACT_ADDRESS_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "ContactAddress_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "CONTACT_ADDRESS_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "ContactId")
+    @Column(name = "CONTACT_ID")
     private Long contactId;
 
-    @Column(name = "AddressTypeId")
+    @Column(name = "ADDRESS_TYPE_ID")
     private Long addressTypeId;
 
-    @Column(name = "CountryId")
+    @Column(name = "COUNTRY_ID")
     private Long countryId;
 
-    @Column(name = "CityId")
+    @Column(name = "CITY_ID")
     private Long cityId;
 
-    @Column(name = "DistrictId")
+    @Column(name = "DISTRICT_ID")
     private Long districtId;
 
-    @Column(name = "StreetId")
+    @Column(name = "STREET_ID")
     private Long streetId;
 
-    @Column(name = "ExteriorDoorId")
+    @Column(name = "EXTERIOR_DOOR_ID")
     private Long exteriorDoorId;
 
-    @Column(name = "InteriorDoorId")
+    @Column(name = "INTERIOR_DOOR_ID")
     private Long interiorDoorId;
 }

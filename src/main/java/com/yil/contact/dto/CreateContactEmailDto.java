@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateContactEmailDto {
-    private String address;
-    private Long emailTypeId;
+    private String email;
 }

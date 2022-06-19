@@ -10,16 +10,16 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @Data
-@Table(name = "PhoneType")
+@Table(name = "PHONE_TYPE")
 public class PhoneType extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "PhoneType_Sequence_Generator",
-            sequenceName = "Seq_PhoneType",
+    @SequenceGenerator(name = "PHONE_TYPE_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_PHONE_TYPE_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "PhoneType_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "PHONE_TYPE_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 }
 

@@ -13,16 +13,16 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Contact")
+@Table(name = "CONTACT")
 public class Contact extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "Contact_Sequence_Generator",
-            sequenceName = "Seq_Contact",
+    @SequenceGenerator(name = "CONTACT_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_CONTACT_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "Contact_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "CONTACT_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "ContactTypeId", nullable = false)
+    @Column(name = "CONTACT_TYPE_ID", nullable = false)
     private Long contactTypeId;
 
 }

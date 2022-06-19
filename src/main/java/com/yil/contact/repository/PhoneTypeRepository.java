@@ -10,4 +10,6 @@ import java.util.List;
 public interface PhoneTypeRepository extends JpaRepository<PhoneType, Long> {
     List<PhoneType> findAllByDeletedTimeIsNull();
 
+    List<PhoneType> findAllByName(String name);
+
 }

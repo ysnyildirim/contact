@@ -42,4 +42,7 @@ public class PhoneTypeService {
         return phoneTypeRepository.findAllByDeletedTimeIsNull();
     }
 
+    public List<PhoneType> findByName(String name) {
+        return phoneTypeRepository.findAllByName(name);
+    }
 }

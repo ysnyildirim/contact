@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/address-types")
+@RequestMapping(value = "/api/contact/v1/address-types")
 public class AddressTypeController {
 
     private final Log logger = LogFactory.getLog(this.getClass());

@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/contact-types")
+@RequestMapping(value = "/api/contact/v1/contact-types")
 public class ContactTypeController {
 
     private final Log logger = LogFactory.getLog(this.getClass());

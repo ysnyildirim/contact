@@ -21,7 +21,7 @@ import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = "v1/contacts/{contactId}/emails")
+@RequestMapping(value = "/api/contact/v1/contacts/{contactId}/emails")
 public class ContactEmailController {
 
     private final Log logger = LogFactory.getLog(this.getClass());

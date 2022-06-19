@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = "v1/contacts")
+@RequestMapping(value = "/api/contact/v1/contacts")
 public class ContactController {
 
     private final Log logger = LogFactory.getLog(this.getClass());

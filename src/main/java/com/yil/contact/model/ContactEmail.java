@@ -1,14 +1,16 @@
 package com.yil.contact.model;
 
 import com.yil.contact.base.AbstractEntity;
+import com.yil.contact.base.IEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "CONTACT_EMAIL")
-public class ContactEmail extends AbstractEntity {
+public class ContactEmail implements IEntity {
     @Id
     @SequenceGenerator(name = "CONTACT_EMAIL_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_CONTACT_EMAIL_ID",
@@ -21,4 +23,9 @@ public class ContactEmail extends AbstractEntity {
     @Column(name = "EMAIL", nullable = false)
     private String email;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_TIME")
+    private Date createdTime;
+    @Column(name = "CREATED_USER_ID")
+    private Long createdUserId;
 }

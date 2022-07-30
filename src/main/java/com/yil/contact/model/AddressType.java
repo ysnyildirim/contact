@@ -1,6 +1,7 @@
 package com.yil.contact.model;
 
 import com.yil.contact.base.AbstractEntity;
+import com.yil.contact.base.IEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "ADDRESS_TYPE")
-public class AddressType  extends AbstractEntity {
+public class AddressType  implements IEntity {
     @Id
     @SequenceGenerator(name = "ADDRESS_TYPE_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_ADDRESS_TYPE_ID",

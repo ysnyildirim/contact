@@ -2,6 +2,7 @@ package com.yil.contact.model;
 
 
 import com.yil.contact.base.AbstractEntity;
+import com.yil.contact.base.IEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "CONTACT_TYPE")
-public class ContactType extends AbstractEntity {
+public class ContactType implements IEntity {
     @Id
     @SequenceGenerator(name = "CONTACT_TYPE_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_CONTACT_TYPE_ID",

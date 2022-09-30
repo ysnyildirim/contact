@@ -66,8 +66,6 @@ public class AddressTypeController {
         try {
             AddressType addressType = new AddressType();
             addressType.setName(dto.getName());
-            addressType.setCreatedUserId(authenticatedAddressId);
-            addressType.setCreatedTime(new Date());
             addressType = addressTypeService.save(addressType);
             return ResponseEntity.created(null).build();
         } catch (Exception exception) {
@@ -113,8 +111,6 @@ public class AddressTypeController {
             } catch (Exception e) {
                 throw e;
             }
-            addressType.setDeletedUserId(authenticatedAddressId);
-            addressType.setDeletedTime(new Date());
             addressTypeService.save(addressType);
             return ResponseEntity.ok().build();
         } catch (Exception exception) {

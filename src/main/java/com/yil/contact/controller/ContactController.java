@@ -134,8 +134,6 @@ public class ContactController {
             } catch (Exception e) {
                 throw e;
             }
-            contact.setDeletedUserId(authenticatedContactId);
-            contact.setDeletedTime(new Date());
             contactService.save(contact);
             return ResponseEntity.ok("Contact deleted.");
         } catch (Exception exception) {

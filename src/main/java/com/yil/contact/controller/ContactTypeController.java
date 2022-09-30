@@ -65,9 +65,7 @@ public class ContactTypeController {
                                  @Valid @RequestBody CreateContactTypeDto dto) {
         try {
             ContactType contactType = new ContactType();
-            contactType.setName(dto.getName()); 
-            contactType.setCreatedUserId(authenticatedContactId);
-            contactType.setCreatedTime(new Date());
+            contactType.setName(dto.getName());
             contactType = contactTypeService.save(contactType);
             return ResponseEntity.created(null).build();
         } catch (Exception exception) {
@@ -112,8 +110,6 @@ public class ContactTypeController {
             } catch (Exception e) {
                 throw e;
             }
-            contactType.setDeletedUserId(authenticatedContactId);
-            contactType.setDeletedTime(new Date());
             contactTypeService.save(contactType);
             return ResponseEntity.ok().build();
         } catch (Exception exception) {

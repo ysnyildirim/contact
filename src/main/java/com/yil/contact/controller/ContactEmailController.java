@@ -137,8 +137,6 @@ public class ContactEmailController {
             }
             if (!entity.getContactId().equals(contactId))
                 return ResponseEntity.notFound().build();
-            entity.setDeletedUserId(authenticatedContactEmailId);
-            entity.setDeletedTime(new Date());
             entity = contactEmailService.save(entity);
             return ResponseEntity.ok("Contact email deleted.");
         } catch (Exception exception) {

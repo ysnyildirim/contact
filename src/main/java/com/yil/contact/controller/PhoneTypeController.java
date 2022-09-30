@@ -65,9 +65,7 @@ public class PhoneTypeController {
                                  @Valid @RequestBody CreatePhoneTypeDto dto) {
         try {
             PhoneType phoneType = new PhoneType();
-            phoneType.setName(dto.getName()); 
-            phoneType.setCreatedUserId(authenticatedPhoneId);
-            phoneType.setCreatedTime(new Date());
+            phoneType.setName(dto.getName());
             phoneType = phoneTypeService.save(phoneType);
             return ResponseEntity.created(null).build();
         } catch (Exception exception) {
@@ -112,8 +110,6 @@ public class PhoneTypeController {
             } catch (Exception e) {
                 throw e;
             }
-            phoneType.setDeletedUserId(authenticatedPhoneId);
-            phoneType.setDeletedTime(new Date());
             phoneTypeService.save(phoneType);
             return ResponseEntity.ok().build();
         } catch (Exception exception) {

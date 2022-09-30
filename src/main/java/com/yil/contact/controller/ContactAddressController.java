@@ -166,8 +166,6 @@ public class ContactAddressController {
             }
             if (!entity.getContactId().equals(contactId))
                 return ResponseEntity.notFound().build();
-            entity.setDeletedUserId(authenticatedContactAddressId);
-            entity.setDeletedTime(new Date());
             entity = contactAddressService.save(entity);
             return ResponseEntity.ok("Contact address deleted.");
         } catch (Exception exception) {

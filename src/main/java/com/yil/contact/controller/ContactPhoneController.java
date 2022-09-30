@@ -139,8 +139,6 @@ public class ContactPhoneController {
             }
             if (!entity.getContactId().equals(contactId))
                 return ResponseEntity.notFound().build();
-            entity.setDeletedUserId(authenticatedContactPhoneId);
-            entity.setDeletedTime(new Date());
             entity = contactPhoneService.save(entity);
             return ResponseEntity.ok("Contact phone deleted.");
         } catch (Exception exception) {

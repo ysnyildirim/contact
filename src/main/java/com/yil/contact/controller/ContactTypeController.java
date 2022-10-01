@@ -1,121 +1,66 @@
 package com.yil.contact.controller;
 
 import com.yil.contact.base.ApiConstant;
-import com.yil.contact.dto.CreateContactTypeDto;
+import com.yil.contact.base.Mapper;
 import com.yil.contact.dto.ContactTypeDto;
+import com.yil.contact.dto.CreateContactTypeDto;
+import com.yil.contact.exception.ContactTypeNotFoundException;
 import com.yil.contact.model.ContactType;
 import com.yil.contact.service.ContactTypeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/contact/v1/contact-types")
+@RequestMapping(value = "/api/cnt/v1/contact-types")
 public class ContactTypeController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final ContactTypeService contactTypeService;
-
-    @Autowired
-    public ContactTypeController(ContactTypeService contactTypeService) {
-        this.contactTypeService = contactTypeService;
-    }
+    private final Mapper<ContactType, ContactTypeDto> mapper = new Mapper<>(ContactTypeService::toDto);
 
     @GetMapping
     public ResponseEntity<List<ContactTypeDto>> findAll() {
-        try {
-            List<ContactType> data = contactTypeService.findAllByDeletedTimeIsNull();
-            List<ContactTypeDto> dtoData = new ArrayList<>();
-            data.forEach(f -> {
-                dtoData.add(ContactTypeService.toDto(f));
-            });
-            return ResponseEntity.ok(dtoData);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.ok(mapper.map(contactTypeService.findAll()));
     }
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ContactTypeDto> findById(@PathVariable Long id) {
-        try {
-            ContactType contactType = contactTypeService.findById(id);
-            ContactTypeDto dto = ContactTypeService.toDto(contactType);
-            return ResponseEntity.ok(dto);
-        } catch (Exception exception) {
-
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ContactTypeDto> findById(@PathVariable Long id) throws ContactTypeNotFoundException {
+        return ResponseEntity.ok(mapper.map(contactTypeService.findById(id)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactId,
                                  @Valid @RequestBody CreateContactTypeDto dto) {
-        try {
-            ContactType contactType = new ContactType();
-            contactType.setName(dto.getName());
-            contactType = contactTypeService.save(contactType);
-            return ResponseEntity.created(null).build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        ContactType contactType = new ContactType();
+        contactType.setName(dto.getName());
+        contactType = contactTypeService.save(contactType);
+        return ResponseEntity.created(null).build();
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactId,
                                   @PathVariable Long id,
-                                  @Valid @RequestBody CreateContactTypeDto dto) {
-        try {
-            ContactType contactType;
-            try {
-                contactType = contactTypeService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            } 
-            contactType.setName(dto.getName());
-            contactType = contactTypeService.save(contactType);
-            return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+                                  @Valid @RequestBody CreateContactTypeDto dto) throws ContactTypeNotFoundException {
+        ContactType contactType = contactTypeService.findById(id);
+        contactType.setName(dto.getName());
+        contactType = contactTypeService.save(contactType);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactId,
                                          @PathVariable Long id) {
-        try {
-            ContactType contactType;
-            try {
-                contactType = contactTypeService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            contactTypeService.save(contactType);
-            return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        contactTypeService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
 }

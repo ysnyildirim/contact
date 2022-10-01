@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactPhoneDto {
+public class ContactPhoneDto implements Serializable {
     private Long id;
     private Long contactId;
     private Long number;

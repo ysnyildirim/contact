@@ -4,10 +4,7 @@ import com.yil.contact.model.ContactType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface ContactTypeRepository extends JpaRepository<ContactType, Long> {
-    List<ContactType> findAllByDeletedTimeIsNull();
+public interface ContactTypeDao extends JpaRepository<ContactType, Long> {
 
 }

@@ -1,22 +1,24 @@
 package com.yil.contact.model;
 
 
-import com.yil.contact.base.AbstractEntity;
 import com.yil.contact.base.IEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @EqualsAndHashCode
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-@Table(name = "PHONE_TYPE")
+@Table(name = "PHONE_TYPE",
+        schema = "CNT")
 public class PhoneType implements IEntity {
     @Id
     @SequenceGenerator(name = "PHONE_TYPE_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_PHONE_TYPE_ID",
-            allocationSize = 1)
+            schema = "CNT")
     @GeneratedValue(generator = "PHONE_TYPE_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;

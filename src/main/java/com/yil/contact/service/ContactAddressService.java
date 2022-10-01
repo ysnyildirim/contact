@@ -1,36 +1,21 @@
 package com.yil.contact.service;
 
 import com.yil.contact.dto.ContactAddressDto;
+import com.yil.contact.exception.ContactAddressNotFoundException;
 import com.yil.contact.model.ContactAddress;
-import com.yil.contact.repository.ContactAddressRepository;
+import com.yil.contact.repository.ContactAddressDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-
 @Service
 public class ContactAddressService {
-    private final ContactAddressRepository contactAddressRepository;
+    private final ContactAddressDao contactAddressDao;
 
     @Autowired
-    public ContactAddressService(ContactAddressRepository contactAddressRepository) {
-        this.contactAddressRepository = contactAddressRepository;
-    }
-
-    public ContactAddress findById(Long id) throws EntityNotFoundException {
-        return contactAddressRepository.findById(id).orElseThrow(() -> {
-            return new EntityNotFoundException();
-        });
-    }
-
-    public ContactAddress save(ContactAddress contact) {
-        return contactAddressRepository.save(contact);
-    }
-
-    public Page<ContactAddress> findAllByAndContactIdAndDeletedTimeIsNull(Pageable pageable,Long contactId) {
-        return contactAddressRepository.findAllByAndContactIdAndDeletedTimeIsNull(pageable,contactId);
+    public ContactAddressService(ContactAddressDao contactAddressDao) {
+        this.contactAddressDao = contactAddressDao;
     }
 
     public static ContactAddressDto toDto(ContactAddress entity) {
@@ -47,5 +32,25 @@ public class ContactAddressService {
         dto.setExteriorDoorId(entity.getExteriorDoorId());
         dto.setInteriorDoorId(entity.getInteriorDoorId());
         return dto;
+    }
+
+    public ContactAddress findById(Long id) throws ContactAddressNotFoundException {
+        return contactAddressDao.findById(id).orElseThrow(ContactAddressNotFoundException::new);
+    }
+
+    public ContactAddress save(ContactAddress contact) {
+        return contactAddressDao.save(contact);
+    }
+
+    public Page<ContactAddress> findAllByAndContactId(Pageable pageable, Long contactId) {
+        return contactAddressDao.findAllByAndContactId(pageable, contactId);
+    }
+
+    public ContactAddress findByIdAndContactId(Long id, long contactId) throws ContactAddressNotFoundException {
+        return contactAddressDao.findByIdAndContactId(id, contactId).orElseThrow(ContactAddressNotFoundException::new);
+    }
+
+    public void deleteByIdAndContactId(long id, long contactId) {
+        contactAddressDao.deleteByIdAndContactId(id, contactId);
     }
 }

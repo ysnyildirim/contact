@@ -1,79 +1,50 @@
 package com.yil.contact.controller;
 
 import com.yil.contact.base.ApiConstant;
+import com.yil.contact.base.Mapper;
 import com.yil.contact.base.PageDto;
-import com.yil.contact.dto.CreateContactPhoneDto;
 import com.yil.contact.dto.ContactPhoneDto;
+import com.yil.contact.dto.CreateContactPhoneDto;
+import com.yil.contact.exception.ContactPhoneNotFoundException;
 import com.yil.contact.model.ContactPhone;
 import com.yil.contact.service.ContactPhoneService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/contact/v1/contacts/{contactId}/phones")
+@RequestMapping(value = "/api/cnt/v1/contacts/{contactId}/phones")
 public class ContactPhoneController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final ContactPhoneService contactPhoneService;
-
-    @Autowired
-    public ContactPhoneController(ContactPhoneService contactPhoneService) {
-        this.contactPhoneService = contactPhoneService;
-    }
+    private final Mapper<ContactPhone, ContactPhoneDto> mapper = new Mapper<>(ContactPhoneService::toDto);
 
     @GetMapping
     public ResponseEntity<PageDto<ContactPhoneDto>> findAll(
             @PathVariable Long contactId,
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
-        try {
-            if (page < 0)
-                page = 0;
-            if (size <= 0 || size > 1000)
-                size = 1000;
-            Pageable pageable = PageRequest.of(page, size);
-            Page<ContactPhone> contactPage = contactPhoneService.findAllByAndContactIdAndDeletedTimeIsNull(pageable, contactId);
-            PageDto<ContactPhoneDto> pageDto = PageDto.toDto(contactPage, ContactPhoneService::toDto);
-            return ResponseEntity.ok(pageDto);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        if (page < 0)
+            page = 0;
+        if (size <= 0 || size > 1000)
+            size = 1000;
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(mapper.map(contactPhoneService.findAllByAndContactId(pageable, contactId)));
     }
 
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ContactPhoneDto> findById(
             @PathVariable Long contactId,
-            @PathVariable Long id) {
-        try {
-            ContactPhone contact;
-            try {
-                contact = contactPhoneService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            if (!contact.getContactId().equals(contactId))
-                return ResponseEntity.notFound().build();
-            ContactPhoneDto dto = ContactPhoneService.toDto(contact);
-            return ResponseEntity.ok(dto);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+            @PathVariable Long id) throws ContactPhoneNotFoundException {
+        return ResponseEntity.ok(mapper.map(contactPhoneService.findByIdAndContactId(id, contactId)));
     }
 
 
@@ -82,19 +53,14 @@ public class ContactPhoneController {
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactPhoneId,
                                  @PathVariable Long contactId,
                                  @Valid @RequestBody CreateContactPhoneDto dto) {
-        try {
-            ContactPhone entity = new ContactPhone();
-            entity.setContactId(contactId);
-            entity.setNumber(dto.getNumber());
-            entity.setPhoneTypeId(dto.getPhoneTypeId());
-            entity.setCreatedUserId(authenticatedContactPhoneId);
-            entity.setCreatedTime(new Date());
-            entity = contactPhoneService.save(entity);
-            return ResponseEntity.created(null).build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        ContactPhone entity = new ContactPhone();
+        entity.setContactId(contactId);
+        entity.setValue(dto.getValue());
+        entity.setPhoneTypeId(dto.getPhoneTypeId());
+        entity.setCreatedUserId(authenticatedContactPhoneId);
+        entity.setCreatedTime(new Date());
+        entity = contactPhoneService.save(entity);
+        return ResponseEntity.created(null).build();
     }
 
 
@@ -103,48 +69,20 @@ public class ContactPhoneController {
     public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactPhoneId,
                                   @PathVariable Long contactId,
                                   @PathVariable Long id,
-                                  @Valid @RequestBody CreateContactPhoneDto dto) {
-        try {
-            ContactPhone entity = null;
-            try {
-                entity = contactPhoneService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-            if (!entity.getContactId().equals(contactId))
-                return ResponseEntity.notFound().build();
-            entity.setPhoneTypeId(dto.getPhoneTypeId());
-            entity.setNumber(dto.getNumber());
-            entity = contactPhoneService.save(entity);
-            return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+                                  @Valid @RequestBody CreateContactPhoneDto dto) throws ContactPhoneNotFoundException {
+        ContactPhone entity = contactPhoneService.findByIdAndContactId(id, contactId);
+        entity.setPhoneTypeId(dto.getPhoneTypeId());
+        entity.setValue(dto.getValue());
+        entity = contactPhoneService.save(entity);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactPhoneId,
-                                         @PathVariable Long contactId,
+    public ResponseEntity<String> delete(@PathVariable Long contactId,
                                          @PathVariable Long id) {
-        try {
-            ContactPhone entity;
-            try {
-                entity = contactPhoneService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            if (!entity.getContactId().equals(contactId))
-                return ResponseEntity.notFound().build();
-            entity = contactPhoneService.save(entity);
-            return ResponseEntity.ok("Contact phone deleted.");
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        contactPhoneService.deleteByIdAndContactId(id, contactId);
+        return ResponseEntity.ok("Contact phone deleted.");
     }
 
 

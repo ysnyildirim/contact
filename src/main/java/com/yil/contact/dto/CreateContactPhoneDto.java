@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateContactPhoneDto {
-    private Long number;
+    private Long value;
     private Long phoneTypeId;
 }

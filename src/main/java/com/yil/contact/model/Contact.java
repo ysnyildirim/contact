@@ -1,6 +1,5 @@
 package com.yil.contact.model;
 
-import com.yil.contact.base.AbstractEntity;
 import com.yil.contact.base.IEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +14,13 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CONTACT")
+@Table(name = "CONTACT",
+        schema = "CNT")
 public class Contact implements IEntity {
     @Id
     @SequenceGenerator(name = "CONTACT_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_CONTACT_ID",
-            allocationSize = 1)
+            schema = "CNT")
     @GeneratedValue(generator = "CONTACT_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;

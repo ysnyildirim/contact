@@ -1,6 +1,5 @@
 package com.yil.contact.model;
 
-import com.yil.contact.base.AbstractEntity;
 import com.yil.contact.base.IEntity;
 import lombok.Data;
 
@@ -9,12 +8,13 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "CONTACT_EMAIL")
+@Table(name = "CONTACT_EMAIL",
+        schema = "CNT")
 public class ContactEmail implements IEntity {
     @Id
     @SequenceGenerator(name = "CONTACT_EMAIL_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_CONTACT_EMAIL_ID",
-            allocationSize = 1)
+            schema = "CNT")
     @GeneratedValue(generator = "CONTACT_EMAIL_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
@@ -22,7 +22,6 @@ public class ContactEmail implements IEntity {
     private Long contactId;
     @Column(name = "EMAIL", nullable = false)
     private String email;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
     private Date createdTime;

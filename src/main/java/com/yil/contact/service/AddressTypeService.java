@@ -1,22 +1,22 @@
 package com.yil.contact.service;
 
 import com.yil.contact.dto.AddressTypeDto;
+import com.yil.contact.exception.AddressTypeNotFoundException;
 import com.yil.contact.model.AddressType;
-import com.yil.contact.repository.AddressTypeRepository;
+import com.yil.contact.repository.AddressTypeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class AddressTypeService {
 
-    private final AddressTypeRepository addressTypeRepository;
+    private final AddressTypeDao addressTypeDao;
 
     @Autowired
-    public AddressTypeService(AddressTypeRepository addressTypeRepository) {
-        this.addressTypeRepository = addressTypeRepository;
+    public AddressTypeService(AddressTypeDao addressTypeDao) {
+        this.addressTypeDao = addressTypeDao;
     }
 
     public static AddressTypeDto toDto(AddressType f) {
@@ -29,17 +29,23 @@ public class AddressTypeService {
     }
 
     public AddressType save(AddressType addressType) {
-        return addressTypeRepository.save(addressType);
+        return addressTypeDao.save(addressType);
     }
 
-    public AddressType findById(Long id) throws EntityNotFoundException {
-        return addressTypeRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException();
-        });
+    public void deleteById(long id) {
+        addressTypeDao.deleteById(id);
     }
 
-    public List<AddressType> findAllByDeletedTimeIsNull() {
-        return addressTypeRepository.findAllByDeletedTimeIsNull();
+    public AddressType findById(Long id) throws AddressTypeNotFoundException {
+        return addressTypeDao.findById(id).orElseThrow(AddressTypeNotFoundException::new);
+    }
+
+    public boolean existsById(long id) {
+        return addressTypeDao.existsById(id);
+    }
+
+    public List<AddressType> findAll() {
+        return addressTypeDao.findAll();
     }
 
 }

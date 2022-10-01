@@ -1,22 +1,22 @@
 package com.yil.contact.service;
 
 import com.yil.contact.dto.PhoneTypeDto;
+import com.yil.contact.exception.PhoneTypeNotFoundException;
 import com.yil.contact.model.PhoneType;
-import com.yil.contact.repository.PhoneTypeRepository;
+import com.yil.contact.repository.PhoneTypeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class PhoneTypeService {
 
-    private final PhoneTypeRepository phoneTypeRepository;
+    private final PhoneTypeDao phoneTypeDao;
 
     @Autowired
-    public PhoneTypeService(PhoneTypeRepository phoneTypeRepository) {
-        this.phoneTypeRepository = phoneTypeRepository;
+    public PhoneTypeService(PhoneTypeDao phoneTypeDao) {
+        this.phoneTypeDao = phoneTypeDao;
     }
 
     public static PhoneTypeDto toDto(PhoneType f) {
@@ -29,20 +29,18 @@ public class PhoneTypeService {
     }
 
     public PhoneType save(PhoneType phoneType) {
-        return phoneTypeRepository.save(phoneType);
+        return phoneTypeDao.save(phoneType);
     }
 
-    public PhoneType findById(Long id) throws EntityNotFoundException {
-        return phoneTypeRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException();
-        });
+    public void deleteById(long id) {
+        phoneTypeDao.deleteById(id);
     }
 
-    public List<PhoneType> findAllByDeletedTimeIsNull() {
-        return phoneTypeRepository.findAllByDeletedTimeIsNull();
+    public PhoneType findById(Long id) throws PhoneTypeNotFoundException {
+        return phoneTypeDao.findById(id).orElseThrow(PhoneTypeNotFoundException::new);
     }
 
-    public List<PhoneType> findByName(String name) {
-        return phoneTypeRepository.findAllByName(name);
+    public List<PhoneType> findAll() {
+        return phoneTypeDao.findAll();
     }
 }

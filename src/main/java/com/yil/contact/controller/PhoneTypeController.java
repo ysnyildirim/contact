@@ -1,121 +1,66 @@
 package com.yil.contact.controller;
 
 import com.yil.contact.base.ApiConstant;
+import com.yil.contact.base.Mapper;
 import com.yil.contact.dto.CreatePhoneTypeDto;
 import com.yil.contact.dto.PhoneTypeDto;
+import com.yil.contact.exception.PhoneTypeNotFoundException;
 import com.yil.contact.model.PhoneType;
 import com.yil.contact.service.PhoneTypeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/contact/v1/phone-types")
+@RequestMapping(value = "/api/cnt/v1/phone-types")
 public class PhoneTypeController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
+    private final Mapper<PhoneType, PhoneTypeDto> mapper = new Mapper<>(PhoneTypeService::toDto);
     private final PhoneTypeService phoneTypeService;
-
-    @Autowired
-    public PhoneTypeController(PhoneTypeService phoneTypeService) {
-        this.phoneTypeService = phoneTypeService;
-    }
 
     @GetMapping
     public ResponseEntity<List<PhoneTypeDto>> findAll() {
-        try {
-            List<PhoneType> data = phoneTypeService.findAllByDeletedTimeIsNull();
-            List<PhoneTypeDto> dtoData = new ArrayList<>();
-            data.forEach(f -> {
-                dtoData.add(PhoneTypeService.toDto(f));
-            });
-            return ResponseEntity.ok(dtoData);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.ok(mapper.map(phoneTypeService.findAll()));
     }
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PhoneTypeDto> findById(@PathVariable Long id) {
-        try {
-            PhoneType phoneType = phoneTypeService.findById(id);
-            PhoneTypeDto dto = PhoneTypeService.toDto(phoneType);
-            return ResponseEntity.ok(dto);
-        } catch (Exception exception) {
-
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<PhoneTypeDto> findById(@PathVariable Long id) throws PhoneTypeNotFoundException {
+        return ResponseEntity.ok(mapper.map(phoneTypeService.findById(id)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
                                  @Valid @RequestBody CreatePhoneTypeDto dto) {
-        try {
-            PhoneType phoneType = new PhoneType();
-            phoneType.setName(dto.getName());
-            phoneType = phoneTypeService.save(phoneType);
-            return ResponseEntity.created(null).build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        PhoneType phoneType = new PhoneType();
+        phoneType.setName(dto.getName());
+        phoneType = phoneTypeService.save(phoneType);
+        return ResponseEntity.created(null).build();
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
                                   @PathVariable Long id,
-                                  @Valid @RequestBody CreatePhoneTypeDto dto) {
-        try {
-            PhoneType phoneType;
-            try {
-                phoneType = phoneTypeService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            } 
-            phoneType.setName(dto.getName());
-            phoneType = phoneTypeService.save(phoneType);
-            return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+                                  @Valid @RequestBody CreatePhoneTypeDto dto) throws PhoneTypeNotFoundException {
+        PhoneType phoneType = phoneTypeService.findById(id);
+        phoneType.setName(dto.getName());
+        phoneType = phoneTypeService.save(phoneType);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedPhoneId,
                                          @PathVariable Long id) {
-        try {
-            PhoneType phoneType;
-            try {
-                phoneType = phoneTypeService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            phoneTypeService.save(phoneType);
-            return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        phoneTypeService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
 }

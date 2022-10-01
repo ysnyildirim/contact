@@ -1,83 +1,53 @@
 package com.yil.contact.controller;
 
 import com.yil.contact.base.ApiConstant;
+import com.yil.contact.base.Mapper;
 import com.yil.contact.base.PageDto;
 import com.yil.contact.dto.ContactAddressDto;
 import com.yil.contact.dto.CreateContactAddressDto;
-import com.yil.contact.model.AddressType;
+import com.yil.contact.exception.AddressTypeNotFoundException;
+import com.yil.contact.exception.ContactAddressNotFoundException;
 import com.yil.contact.model.ContactAddress;
 import com.yil.contact.service.AddressTypeService;
 import com.yil.contact.service.ContactAddressService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/contact/v1/contacts/{contactId}/address")
+@RequestMapping(value = "/api/cnt/v1/contacts/{contactId}/address")
 public class ContactAddressController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final ContactAddressService contactAddressService;
     private final AddressTypeService addressTypeService;
-
-    @Autowired
-    public ContactAddressController(ContactAddressService contactAddressService, AddressTypeService addressTypeService) {
-        this.contactAddressService = contactAddressService;
-        this.addressTypeService = addressTypeService;
-    }
+    private final Mapper<ContactAddress, ContactAddressDto> mapper = new Mapper<>(ContactAddressService::toDto);
 
     @GetMapping
     public ResponseEntity<PageDto<ContactAddressDto>> findAll(
             @PathVariable Long contactId,
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
-        try {
-            if (page < 0)
-                page = 0;
-            if (size <= 0 || size > 1000)
-                size = 1000;
-            Pageable pageable = PageRequest.of(page, size);
-            Page<ContactAddress> contactPage = contactAddressService.findAllByAndContactIdAndDeletedTimeIsNull(pageable, contactId);
-            PageDto<ContactAddressDto> pageDto = PageDto.toDto(contactPage, ContactAddressService::toDto);
-            return ResponseEntity.ok(pageDto);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        if (page < 0)
+            page = 0;
+        if (size <= 0 || size > 1000)
+            size = 1000;
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(mapper.map(contactAddressService.findAllByAndContactId(pageable, contactId)));
     }
 
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ContactAddressDto> findById(
             @PathVariable Long contactId,
-            @PathVariable Long id) {
-        try {
-            ContactAddress entity;
-            try {
-                entity = contactAddressService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            if (!entity.getContactId().equals(contactId))
-                return ResponseEntity.notFound().build();
-            ContactAddressDto dto = ContactAddressService.toDto(entity);
-            return ResponseEntity.ok(dto);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+            @PathVariable Long id) throws ContactAddressNotFoundException {
+        return ResponseEntity.ok(mapper.map(contactAddressService.findByIdAndContactId(id, contactId)));
     }
 
 
@@ -85,31 +55,22 @@ public class ContactAddressController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactAddressId,
                                  @PathVariable Long contactId,
-                                 @Valid @RequestBody CreateContactAddressDto dto) {
-        try {
-            AddressType addressType = null;
-            try {
-                addressType = addressTypeService.findById(dto.getAddressTypeId());
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-            ContactAddress entity = new ContactAddress();
-            entity.setContactId(contactId);
-            entity.setAddressTypeId(addressType.getId());
-            entity.setCountryId(dto.getCountryId());
-            entity.setCityId(dto.getCityId());
-            entity.setDistrictId(dto.getDistrictId());
-            entity.setStreetId(dto.getStreetId());
-            entity.setExteriorDoorId(dto.getExteriorDoorId());
-            entity.setInteriorDoorId(dto.getInteriorDoorId());
-            entity.setCreatedUserId(authenticatedContactAddressId);
-            entity.setCreatedTime(new Date());
-            entity = contactAddressService.save(entity);
-            return ResponseEntity.created(null).build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+                                 @Valid @RequestBody CreateContactAddressDto dto) throws AddressTypeNotFoundException {
+        if (!addressTypeService.existsById(dto.getAddressTypeId()))
+            throw new AddressTypeNotFoundException();
+        ContactAddress entity = new ContactAddress();
+        entity.setContactId(contactId);
+        entity.setAddressTypeId(dto.getAddressTypeId());
+        entity.setCountryId(dto.getCountryId());
+        entity.setCityId(dto.getCityId());
+        entity.setDistrictId(dto.getDistrictId());
+        entity.setStreetId(dto.getStreetId());
+        entity.setExteriorDoorId(dto.getExteriorDoorId());
+        entity.setInteriorDoorId(dto.getInteriorDoorId());
+        entity.setCreatedUserId(authenticatedContactAddressId);
+        entity.setCreatedTime(new Date());
+        entity = contactAddressService.save(entity);
+        return ResponseEntity.created(null).build();
     }
 
 
@@ -118,36 +79,19 @@ public class ContactAddressController {
     public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactAddressId,
                                   @PathVariable Long contactId,
                                   @PathVariable Long id,
-                                  @Valid @RequestBody CreateContactAddressDto dto) {
-        try {
-            AddressType addressType = null;
-            try {
-                addressType = addressTypeService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-
-            ContactAddress entity = null;
-            try {
-                entity = contactAddressService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-            if (!entity.getContactId().equals(contactId))
-                return ResponseEntity.notFound().build();
-            entity.setAddressTypeId(addressType.getId());
-            entity.setCountryId(dto.getCountryId());
-            entity.setCityId(dto.getCityId());
-            entity.setDistrictId(dto.getDistrictId());
-            entity.setStreetId(dto.getStreetId());
-            entity.setExteriorDoorId(dto.getExteriorDoorId());
-            entity.setInteriorDoorId(dto.getInteriorDoorId());
-            entity = contactAddressService.save(entity);
-            return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+                                  @Valid @RequestBody CreateContactAddressDto dto) throws AddressTypeNotFoundException, ContactAddressNotFoundException {
+        if (!addressTypeService.existsById(dto.getAddressTypeId()))
+            throw new AddressTypeNotFoundException();
+        ContactAddress entity = contactAddressService.findByIdAndContactId(id, contactId);
+        entity.setAddressTypeId(dto.getAddressTypeId());
+        entity.setCountryId(dto.getCountryId());
+        entity.setCityId(dto.getCityId());
+        entity.setDistrictId(dto.getDistrictId());
+        entity.setStreetId(dto.getStreetId());
+        entity.setExteriorDoorId(dto.getExteriorDoorId());
+        entity.setInteriorDoorId(dto.getInteriorDoorId());
+        entity = contactAddressService.save(entity);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}")
@@ -155,23 +99,8 @@ public class ContactAddressController {
     public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedContactAddressId,
                                          @PathVariable Long contactId,
                                          @PathVariable Long id) {
-        try {
-            ContactAddress entity;
-            try {
-                entity = contactAddressService.findById(id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            if (!entity.getContactId().equals(contactId))
-                return ResponseEntity.notFound().build();
-            entity = contactAddressService.save(entity);
-            return ResponseEntity.ok("Contact address deleted.");
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
-        }
+        contactAddressService.deleteByIdAndContactId(id, contactId);
+        return ResponseEntity.ok("Contact address deleted.");
     }
 
 

@@ -41,7 +41,7 @@ public class ContactTypeController {
         ContactType contactType = new ContactType();
         contactType.setName(dto.getName());
         contactType = contactTypeService.save(contactType);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(value = "/{id}")

@@ -70,7 +70,7 @@ public class ContactAddressController {
         entity.setCreatedUserId(authenticatedContactAddressId);
         entity.setCreatedTime(new Date());
         entity = contactAddressService.save(entity);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

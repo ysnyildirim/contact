@@ -41,7 +41,7 @@ public class AddressTypeController {
         AddressType addressType = new AddressType();
         addressType.setName(dto.getName());
         addressType = addressTypeService.save(addressType);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(value = "/{id}")

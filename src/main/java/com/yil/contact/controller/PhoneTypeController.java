@@ -41,7 +41,7 @@ public class PhoneTypeController {
         PhoneType phoneType = new PhoneType();
         phoneType.setName(dto.getName());
         phoneType = phoneTypeService.save(phoneType);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(value = "/{id}")

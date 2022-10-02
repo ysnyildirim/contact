@@ -57,7 +57,7 @@ public class ContactEmailController {
         entity.setCreatedUserId(authenticatedContactEmailId);
         entity.setCreatedTime(new Date());
         entity = contactEmailService.save(entity);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")

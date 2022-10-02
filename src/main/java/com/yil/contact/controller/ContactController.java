@@ -58,7 +58,7 @@ public class ContactController {
         contact.setCreatedUserId(authenticatedContactId);
         contact.setCreatedTime(new Date());
         contact = contactService.save(contact);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

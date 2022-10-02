@@ -60,7 +60,7 @@ public class ContactPhoneController {
         entity.setCreatedUserId(authenticatedContactPhoneId);
         entity.setCreatedTime(new Date());
         entity = contactPhoneService.save(entity);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

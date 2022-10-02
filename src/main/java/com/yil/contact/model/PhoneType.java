@@ -1,6 +1,5 @@
 package com.yil.contact.model;
 
-
 import com.yil.contact.base.IEntity;
 import lombok.*;
 
@@ -25,4 +24,3 @@ public class PhoneType implements IEntity {
     @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 }
-

@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class PhoneTypeService {
-
     private final PhoneTypeDao phoneTypeDao;
 
     @Autowired

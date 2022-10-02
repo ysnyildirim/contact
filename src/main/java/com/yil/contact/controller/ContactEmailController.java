@@ -22,7 +22,6 @@ import java.util.Date;
 @RestController
 @RequestMapping(value = "/api/cnt/v1/contacts/{contactId}/emails")
 public class ContactEmailController {
-
     private final ContactEmailService contactEmailService;
     private final Mapper<ContactEmail, ContactEmailDto> mapper = new Mapper<>(ContactEmailService::toDto);
 

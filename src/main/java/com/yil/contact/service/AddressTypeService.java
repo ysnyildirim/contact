@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class AddressTypeService {
-
     private final AddressTypeDao addressTypeDao;
 
     @Autowired
@@ -47,5 +46,4 @@ public class AddressTypeService {
     public List<AddressType> findAll() {
         return addressTypeDao.findAll();
     }
-
 }

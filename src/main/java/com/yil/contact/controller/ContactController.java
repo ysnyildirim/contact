@@ -24,11 +24,9 @@ import java.util.Date;
 @RestController
 @RequestMapping(value = "/api/cnt/v1/contacts")
 public class ContactController {
-
     private final ContactService contactService;
     private final ContactTypeService contactTypeService;
     private final Mapper<Contact, ContactDto> mapper = new Mapper<>(ContactService::toDto);
-
 
     @GetMapping
     public ResponseEntity<PageDto<ContactDto>> findAll(
@@ -42,12 +40,10 @@ public class ContactController {
         return ResponseEntity.ok(mapper.map(contactService.findAll(pageable)));
     }
 
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<ContactDto> findById(@PathVariable Long id) throws ContactNotFoundException {
         return ResponseEntity.ok(mapper.map(contactService.findById(id)));
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,7 +56,6 @@ public class ContactController {
         contact = contactService.save(contact);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -82,6 +77,4 @@ public class ContactController {
         contactService.deleteById(id);
         return ResponseEntity.ok("Contact deleted.");
     }
-
-
 }

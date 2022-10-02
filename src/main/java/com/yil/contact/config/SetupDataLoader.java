@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextStartedEvent> {
-
     @Autowired
     private PhoneTypeDao phoneTypeDao;
 
@@ -28,8 +27,5 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         phoneTypeDao.save(PhoneType.builder().id(2l).name("İŞ TELEFONU").build());
         phoneTypeDao.save(PhoneType.builder().id(3l).name("EV TELEFONU").build());
         phoneTypeDao.save(PhoneType.builder().id(4l).name("VELİSİNİN/YAKINININ TELEFONU").build());
-
     }
-
-
 }

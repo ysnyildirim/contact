@@ -14,11 +14,9 @@ import java.util.Optional;
 public interface ContactPhoneDao extends JpaRepository<ContactPhone, Long> {
     Page<ContactPhone> findAllByAndContactId(Pageable pageable, Long contactId);
 
-
     Optional<ContactPhone> findByIdAndContactId(long id, long contactId);
 
     @Modifying
     @Transactional
     void deleteByIdAndContactId(long id, long contactId);
-
 }

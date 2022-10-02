@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/cnt/v1/address-types")
 public class AddressTypeController {
-
     private final AddressTypeService addressTypeService;
     private final Mapper<AddressType, AddressTypeDto> mapper = new Mapper<>(AddressTypeService::toDto);
 
@@ -27,7 +26,6 @@ public class AddressTypeController {
     public ResponseEntity<List<AddressTypeDto>> findAll() {
         return ResponseEntity.ok(mapper.map(addressTypeService.findAll()));
     }
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AddressTypeDto> findById(@PathVariable Long id) throws AddressTypeNotFoundException {
@@ -62,5 +60,4 @@ public class AddressTypeController {
         addressTypeService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 }

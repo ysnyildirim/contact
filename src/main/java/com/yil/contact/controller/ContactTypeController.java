@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/cnt/v1/contact-types")
 public class ContactTypeController {
-
     private final ContactTypeService contactTypeService;
     private final Mapper<ContactType, ContactTypeDto> mapper = new Mapper<>(ContactTypeService::toDto);
 
@@ -27,7 +26,6 @@ public class ContactTypeController {
     public ResponseEntity<List<ContactTypeDto>> findAll() {
         return ResponseEntity.ok(mapper.map(contactTypeService.findAll()));
     }
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ContactTypeDto> findById(@PathVariable Long id) throws ContactTypeNotFoundException {
@@ -62,5 +60,4 @@ public class ContactTypeController {
         contactTypeService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 }

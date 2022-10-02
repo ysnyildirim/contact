@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressTypeDao extends JpaRepository<AddressType, Long> {
-
 }

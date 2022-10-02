@@ -31,5 +31,4 @@ public class Contact implements IEntity {
     private Date createdTime;
     @Column(name = "CREATED_USER_ID")
     private Long createdUserId;
-
 }

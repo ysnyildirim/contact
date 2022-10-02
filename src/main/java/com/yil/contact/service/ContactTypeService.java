@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class ContactTypeService {
-
     private final ContactTypeDao contactTypeDao;
 
     @Autowired

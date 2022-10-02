@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/cnt/v1/phone-types")
 public class PhoneTypeController {
-
     private final Mapper<PhoneType, PhoneTypeDto> mapper = new Mapper<>(PhoneTypeService::toDto);
     private final PhoneTypeService phoneTypeService;
 
@@ -27,7 +26,6 @@ public class PhoneTypeController {
     public ResponseEntity<List<PhoneTypeDto>> findAll() {
         return ResponseEntity.ok(mapper.map(phoneTypeService.findAll()));
     }
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PhoneTypeDto> findById(@PathVariable Long id) throws PhoneTypeNotFoundException {
@@ -62,5 +60,4 @@ public class PhoneTypeController {
         phoneTypeService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 }

@@ -1,6 +1,5 @@
 package com.yil.contact.model;
 
-
 import com.yil.contact.base.IEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,4 +22,3 @@ public class ContactType implements IEntity {
     @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 }
-

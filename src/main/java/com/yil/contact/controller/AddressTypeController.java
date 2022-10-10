@@ -8,6 +8,7 @@ import com.yil.contact.exception.AddressTypeNotFoundException;
 import com.yil.contact.model.AddressType;
 import com.yil.contact.service.AddressTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class AddressTypeController {
     private final AddressTypeService addressTypeService;
     private final Mapper<AddressType, AddressTypeDto> mapper = new Mapper<>(AddressTypeService::toDto);
 
+    @Cacheable("address-type")
     @GetMapping
     public ResponseEntity<List<AddressTypeDto>> findAll() {
         return ResponseEntity.ok(mapper.map(addressTypeService.findAll()));

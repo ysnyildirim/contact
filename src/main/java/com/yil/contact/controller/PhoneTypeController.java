@@ -8,6 +8,7 @@ import com.yil.contact.exception.PhoneTypeNotFoundException;
 import com.yil.contact.model.PhoneType;
 import com.yil.contact.service.PhoneTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class PhoneTypeController {
     private final Mapper<PhoneType, PhoneTypeDto> mapper = new Mapper<>(PhoneTypeService::toDto);
     private final PhoneTypeService phoneTypeService;
 
+    @Cacheable("phone-type")
     @GetMapping
     public ResponseEntity<List<PhoneTypeDto>> findAll() {
         return ResponseEntity.ok(mapper.map(phoneTypeService.findAll()));

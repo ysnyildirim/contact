@@ -8,6 +8,8 @@ import com.yil.contact.exception.ContactTypeNotFoundException;
 import com.yil.contact.model.ContactType;
 import com.yil.contact.service.ContactTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ public class ContactTypeController {
     private final ContactTypeService contactTypeService;
     private final Mapper<ContactType, ContactTypeDto> mapper = new Mapper<>(ContactTypeService::toDto);
 
+    @Cacheable("contact-type")
     @GetMapping
     public ResponseEntity<List<ContactTypeDto>> findAll() {
         return ResponseEntity.ok(mapper.map(contactTypeService.findAll()));

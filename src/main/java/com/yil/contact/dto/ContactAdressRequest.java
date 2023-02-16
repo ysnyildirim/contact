@@ -11,13 +11,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateContactAddressDto {
+public class ContactAdressRequest {
     @NotNull
     private Long addressTypeId;
-    private Long countryId;
-    private Long cityId;
-    private Long districtId;
-    private Long streetId;
-    private Long exteriorDoorId;
-    private Long interiorDoorId;
+    @NotNull
+    private Long regionId;
 }

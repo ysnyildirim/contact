@@ -22,21 +22,16 @@ public class ContactAddress implements IEntity {
     private Long contactId;
     @Column(name = "ADDRESS_TYPE_ID", nullable = false)
     private Long addressTypeId;
-    @Column(name = "COUNTRY_ID")
-    private Long countryId;
-    @Column(name = "CITY_ID")
-    private Long cityId;
-    @Column(name = "DISTRICT_ID")
-    private Long districtId;
-    @Column(name = "STREET_ID")
-    private Long streetId;
-    @Column(name = "EXTERIOR_DOOR_ID")
-    private Long exteriorDoorId;
-    @Column(name = "INTERIOR_DOOR_ID")
-    private Long interiorDoorId;
+    @Column(name = "REGION_ID")
+    private Long regionId;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
     private Date createdTime;
     @Column(name = "CREATED_USER_ID")
     private Long createdUserId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_MODIFY_DATE")
+    private Date lastModifyDate;
+    @Column(name = "LAST_MODIFY_USER_ID")
+    private Long lastModifyUserId;
 }

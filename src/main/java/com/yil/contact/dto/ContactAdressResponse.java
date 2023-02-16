@@ -5,15 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactAddressDto implements Serializable {
+public class ContactAdressResponse {
     private Long id;
-    private Long contactId;
-    private Long addressTypeId;
-    private Long regionId;
 }
